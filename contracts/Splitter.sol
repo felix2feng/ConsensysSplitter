@@ -20,7 +20,11 @@ contract Splitter is Owned {
     }
     
 	mapping (address => Person) people;
-
+	
+	event LogWithdrawal(address _address, uint amount);
+	event LogSplit(address _address, uint amount);
+	
+    // Constructor Function
 	function Splitter() {}
 	
 	function addSplittee(address splittee) 
@@ -63,6 +67,8 @@ contract Splitter is Owned {
             people[msg.sender].balance = balanceToWithdraw;
             return false;
         }
+        
+        LogWithdrawal(msg.sender, balanceToWithdraw);
 	    return true;
 	}
 
@@ -88,6 +94,7 @@ contract Splitter is Owned {
             people[splitteeAddress].balance += splitAmount;
         }
         
+        LogSplit(msg.sender, msg.value);
         return true;
 	}
 	

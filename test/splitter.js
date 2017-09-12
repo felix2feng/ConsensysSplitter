@@ -18,25 +18,26 @@ contract('Splitter', function(accounts) {
   it('should successfully split and send to the right people', function() {
     return splitter.split(bob, carol, { from: alice, value: 10 })
       .then(function () {
-        return Promise.all({
-          bob: splitter.balances[bob],
-          carol: splitter.balances[carol]
-        })
+        return Promise.all([
+          splitter.balances(bob),
+          splitter.balances(carol)
+        ])
       })
-      .then(function (obj) {
-        assert.equal(obj.bob, 5, "Bob should have 5");
-        assert.equal(obj.carol, 5, "Carol should have 5");
+      .then(function (arr) {
+        assert.equal(arr[0], 5, "Bob should have 5");
+        assert.equal(arr[1], 5, "Carol should have 5");
       })
   });
 
-  it('should kill the contract and withdraw all funds', function() {
-    return splitter.killContract({ from: owner})
-      .then(function (txn) {
-        return splitter.getBalance({ from: owner })
-      })
-      .then(function (balance) {
-        assert.equal(balance, 0, "Balance should be 0");
-      });
-  });
+  // QUESTION - is there a proper way to assert that there should be
+  // an expected throw?
+  // it('should kill the contract and withdraw all funds', function() {
+  //   return splitter.lockContract({ from: owner})
+  //     .then(function (txn) {
+  //       return splitter.split(bob, carol, {from: alice, value: 10 });
+  //     })
+  //     .then(assert.fail)
+  //     .catch(console.log)
+  // });
  
 });

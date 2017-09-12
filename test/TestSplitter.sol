@@ -11,7 +11,7 @@ contract TestSplitter {
 
     uint expected = 0;
 
-    Assert.equal(splitter.getBalance(tx.origin), expected, "Contract should have 0 balance initially");
+    Assert.equal(splitter.balances(tx.origin), expected, "Contract should have 0 balance initially");
   }
 
   function testInitialBalanceWithNewMetaCoin() {
@@ -19,7 +19,7 @@ contract TestSplitter {
 
     uint expected = 0;
 
-    Assert.equal(splitter.getBalance(tx.origin), expected, "Contract should have 0 balance initially");
+    Assert.equal(splitter.balances(tx.origin), expected, "Contract should have 0 balance initially");
   }
 
 }

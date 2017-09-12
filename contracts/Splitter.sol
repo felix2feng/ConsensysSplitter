@@ -14,6 +14,8 @@ contract Owned {
 }
 
 contract Splitter is Owned {
+
+  bool isLocked = false;
     
   mapping (address => uint) public balances;
   
@@ -27,6 +29,9 @@ contract Splitter is Owned {
       public
       returns(bool)
   {
+      // Require the contract is not locked
+      require(!isLocked);
+
       uint balanceToWithdraw = balances[msg.sender];
       
       // Require that the requester has a balance
@@ -50,6 +55,9 @@ contract Splitter is Owned {
       public
       returns (bool success) 
     {
+        // Check that the contract is not isLocked
+        require(!isLocked);
+
         // Check that there is a balance
         require(msg.value > 0);
 
@@ -71,12 +79,23 @@ contract Splitter is Owned {
         return true;
   }
   
-  function killContract () 
+  function lockContract () 
       onlyOwner()
       returns (bool)
   {
       // All ether in the contract is sent to the owner
       // and the storage and code is removed from state
-      selfdestruct(owner);
+      isLocked = true;
+      return true;
+  }
+
+  function unlockContract () 
+      onlyOwner()
+      returns (bool)
+  {
+      // All ether in the contract is sent to the owner
+      // and the storage and code is removed from state
+      isLocked = false;
+      return true;
   }
 }

@@ -40,13 +40,9 @@ contract Splitter is Owned {
       // Set to 0 ahead of time to prevent reentrance attacks
       balances[msg.sender] = 0;
       
-      if (!msg.sender.send(balanceToWithdraw)) {
-            // Reset balance if the send has failed
-            balances[msg.sender] = balanceToWithdraw;
-            return false;
-        }
+      if (!msg.sender.send(balanceToWithdraw)) throw;
         
-        LogWithdrawal(msg.sender, balanceToWithdraw);
+      LogWithdrawal(msg.sender, balanceToWithdraw);
       return true;
   }
 
